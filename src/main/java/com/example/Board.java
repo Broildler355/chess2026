@@ -22,7 +22,7 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Board extends JPanel implements MouseListener, MouseMotionListener {
 	// Resource location constants for piece images
-    private static final String path = "/src/main/java/com/example/Pictures/";
+    private static final String path = "src/main/java/com/example/Pictures/";
     private static final String RESOURCES_WBISHOP_PNG = path+"wbishop.png";
 	private static final String RESOURCES_BBISHOP_PNG = path+"bbishop.png";
 	private static final String RESOURCES_WKNIGHT_PNG = path+"wknight.png";
@@ -70,8 +70,17 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 //        	white to black.
         
         
-        initializePieces();
         
+        int i = 0;
+        for(int x = 0; x<8; x++) {
+            for (int y = 0; y<8; y++) {
+                board[x][y] = new Square(this,(i%2)==0,x,y);
+                this.add(board[x][y]);
+                i++;
+            }
+            i++;
+        }
+        initializePieces();
 
         this.setPreferredSize(new Dimension(400, 400));
         this.setMaximumSize(new Dimension(400, 400));
@@ -87,8 +96,12 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	//since we only have one kind of piece for now you need only set the same number of pieces on either side.
 	//it's up to you how you wish to arrange your pieces.
     void initializePieces() {
+        int m = 0;
+    	for (int i =0; i<8; i++ ){
+            board[6][i].put(new Piece((m%2)==0,  RESOURCES_BPAWN_PNG));
+            board[1][i].put(new Piece((m%2)==0, RESOURCES_WPAWN_PNG));
+        }
     	
-    	// board[0][0].put(new Piece(true, path+ RESOURCES_WKING_PNG));
         
 
     }
@@ -114,7 +127,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
      Image backgroundImage = null; 
      URL imageUrl = null;
      if (currPiece != null) {
-      imageUrl = getClass().getResource("/src/main/java/com/example/"+currPiece.getImage());
+      imageUrl = getClass().getResource(path+currPiece.getImage());
      }
 
      if (imageUrl != null) {
@@ -131,7 +144,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
                 if(sq == fromMoveSquare)
                 	 sq.setBorder(BorderFactory.createLineBorder(Color.blue));
                 sq.paintComponent(g);
-                System.out.println("Painting square at " + x + ", " + y);   
+               // System.out.println("Painting square at " + x + ", " + y);   
                 
             }
         }
