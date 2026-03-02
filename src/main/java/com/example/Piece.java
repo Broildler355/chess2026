@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 //you will need to implement two functions in this file.
 public class Piece {
+    private boolean king = false;
     private final boolean color;
     private BufferedImage img;
     
@@ -62,9 +63,29 @@ public class Piece {
     //please note that your piece must have some sort of logic. Just being able to move to every square on the board is not
     //going to score any points.
     public ArrayList<Square> getLegalMoves(Board b, Square start){
-        if () {
-            b.getSquareArray()[start.getRow()+1][start.getRow()+1].isOccupied();
+        ArrayList<Square> moves = new ArrayList<>();
+        if (king) {
+            b.getSquareArray()[start.getRow()+1][start.getCol()+1].isOccupied();
         }
-    	return null;
+        else {
+            //up to the right is in bounds for jumps for takes
+            if(start.getRow()-2>=0 && start.getCol()+2<=7){
+                //there is a piece of opposite color up and to the right of us and no piece preventing a jump
+                if(b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() && b.getSquareArray()[start.getRow()-1][start.getCol()+1].getOccupyingPiece().getColor()!=color && !b.getSquareArray()[start.getRow()-2][start.getCol()+2].isOccupied()) {
+                    moves.add(b.getSquareArray()[start.getRow()-2][start.getCol()+2]);
+                }
+                  else if(!b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() ) {
+                    moves.add(b.getSquareArray()[start.getRow()-1][start.getCol()+1]);
+                }
+
+            }
+            //up and to the right is in bounds for non taking jumps
+            else if(start.getRow()-1>=0&&start.getCol()+1<=7) {
+                if(!b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() ) {
+                    moves.add(b.getSquareArray()[start.getRow()-1][start.getCol()+1]);
+                }
+            }
+        }
+    	return moves;
     }
 }
