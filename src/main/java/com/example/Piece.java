@@ -65,27 +65,58 @@ public class Piece {
     public ArrayList<Square> getLegalMoves(Board b, Square start){
         ArrayList<Square> moves = new ArrayList<>();
         if (king) {
-            b.getSquareArray()[start.getRow()+1][start.getCol()+1].isOccupied();
+//down to the right is in bounds for jumps for takes
+            if(start.getRow()+2<=7 && start.getCol()+2<=7){
+                //there is a piece of opposite color down and to the right of us and no piece preventing a jump
+                if(b.getSquareArray()[start.getRow()+1][start.getCol()+1].isOccupied() && b.getSquareArray()[start.getRow()+1][start.getCol()+1].getOccupyingPiece().getColor()!=color && !b.getSquareArray()[start.getRow()+2][start.getCol()+2].isOccupied()) {
+                    moves.add(b.getSquareArray()[start.getRow()-2][start.getCol()+2]);
+                }
+            }
+            //down and to the right is in bounds for non taking jumps
+            if(start.getRow()+1<=7&&start.getCol()+1<=7) {
+                if(!b.getSquareArray()[start.getRow()+1][start.getCol()+1].isOccupied() ) {
+                    moves.add(b.getSquareArray()[start.getRow()+1][start.getCol()+1]);
+                }
+            }
+
+            //down and to the left is in bounds for taking jumps
+            if(start.getRow()+2<=7 && start.getCol()-2>=0){
+                //there is a piece of opposite color down and to the left of us and no piece preventing a jump
+                if(b.getSquareArray()[start.getRow()+1][start.getCol()-1].isOccupied() && b.getSquareArray()[start.getRow()+1][start.getCol()-1].getOccupyingPiece().getColor()!=color && !b.getSquareArray()[start.getRow()+2][start.getCol()-2].isOccupied()) {
+                    moves.add(b.getSquareArray()[start.getRow()+2][start.getCol()+2]);
+                }
+            }
+            //down and to the left is in bounds for non taking jumps
+            if(!b.getSquareArray()[start.getRow()+1][start.getCol()+1].isOccupied() && start.getRow()+1<=7 && start.getCol()-1>=0) {
+                 moves.add(b.getSquareArray()[start.getRow()+1][start.getCol()+1]);
+            }
         }
-        else {
+
             //up to the right is in bounds for jumps for takes
             if(start.getRow()-2>=0 && start.getCol()+2<=7){
                 //there is a piece of opposite color up and to the right of us and no piece preventing a jump
                 if(b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() && b.getSquareArray()[start.getRow()-1][start.getCol()+1].getOccupyingPiece().getColor()!=color && !b.getSquareArray()[start.getRow()-2][start.getCol()+2].isOccupied()) {
                     moves.add(b.getSquareArray()[start.getRow()-2][start.getCol()+2]);
                 }
-                  else if(!b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() ) {
-                    moves.add(b.getSquareArray()[start.getRow()-1][start.getCol()+1]);
-                }
-
             }
             //up and to the right is in bounds for non taking jumps
-            else if(start.getRow()-1>=0&&start.getCol()+1<=7) {
+            if(start.getRow()-1>=0&&start.getCol()+1<=7) {
                 if(!b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() ) {
                     moves.add(b.getSquareArray()[start.getRow()-1][start.getCol()+1]);
                 }
             }
-        }
+
+            //up and to the left is in bounds for taking jumps
+            if(start.getRow()-2>=0 && start.getCol()-2>=0){
+                //there is a piece of opposite color up and to the left of us and no piece preventing a jump
+                if(b.getSquareArray()[start.getRow()-1][start.getCol()-1].isOccupied() && b.getSquareArray()[start.getRow()-1][start.getCol()-1].getOccupyingPiece().getColor()!=color && !b.getSquareArray()[start.getRow()-2][start.getCol()-2].isOccupied()) {
+                    moves.add(b.getSquareArray()[start.getRow()-2][start.getCol()+2]);
+                }
+            }
+            //up and to the left is in bounds for non taking jumps
+            if(!b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() && start.getRow()-1>=0 && start.getCol()-1>=0) {
+                 moves.add(b.getSquareArray()[start.getRow()-1][start.getCol()+1]);
+            }
     	return moves;
     }
 }
