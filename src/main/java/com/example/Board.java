@@ -23,16 +23,16 @@ import javax.swing.*;
 public class Board extends JPanel implements MouseListener, MouseMotionListener {
 	// Resource location constants for piece images
     private static final String path = "src/main/java/com/example/Pictures/";
-    private static final String RESOURCES_WBISHOP_PNG = path+"wbishop.png";
-	private static final String RESOURCES_BBISHOP_PNG = path+"bbishop.png";
-	private static final String RESOURCES_WKNIGHT_PNG = path+"wknight.png";
-	private static final String RESOURCES_BKNIGHT_PNG = path+"bknight.png";
-	private static final String RESOURCES_WROOK_PNG = path+"wrook.png";
-	private static final String RESOURCES_BROOK_PNG = path+"brook.png";
-	private static final String RESOURCES_WKING_PNG = path+"wking.png";
-	private static final String RESOURCES_BKING_PNG = path+"bking.png";
-	private static final String RESOURCES_BQUEEN_PNG = path+"bqueen.png";
-	private static final String RESOURCES_WQUEEN_PNG = path+"wqueen.png";
+    //private static final String RESOURCES_WBISHOP_PNG = path+"wbishop.png";
+	//private static final String RESOURCES_BBISHOP_PNG = path+"bbishop.png";
+	//private static final String RESOURCES_WKNIGHT_PNG = path+"wknight.png";
+	//private static final String RESOURCES_BKNIGHT_PNG = path+"bknight.png";
+	//private static final String RESOURCES_WROOK_PNG = path+"wrook.png";
+	//private static final String RESOURCES_BROOK_PNG = path+"brook.png";
+	//private static final String RESOURCES_WKING_PNG = path+"wking.png";
+	//private static final String RESOURCES_BKING_PNG = path+"bking.png";
+	//private static final String RESOURCES_BQUEEN_PNG = path+"bqueen.png";
+	//private static final String RESOURCES_WQUEEN_PNG = path+"wqueen.png";
 	private static final String RESOURCES_WPAWN_PNG = path+"wpawn.png";
 	private static final String RESOURCES_BPAWN_PNG = path+"bpawn.png";
 
@@ -162,20 +162,25 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 
         Square sq = (Square) this.getComponentAt(new Point(e.getX(), e.getY()));
         fromMoveSquare = sq;
+        System.out.println("1");
         if (sq.isOccupied()) {
+            System.out.println("2");
             currPiece = sq.getOccupyingPiece();
             for(Square s: currPiece.getLegalMoves(this, fromMoveSquare)) {
                 s.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.blue));
             }
-            for(Square s: currPiece.getLegalMoves(this, fromMoveSquare)) {
+            for(Square s: currPiece.getControlledSquares(board, fromMoveSquare)) {
                 s.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.red));
             }
             fromMoveSquare = sq;
             if (currPiece.getColor() != whiteTurn)
                 return;
             sq.setDisplay(false);
+            System.out.println("3");
         }
+        System.out.println("4");
         repaint();
+        System.out.println("5");
     }
 
     //TO BE IMPLEMENTED!

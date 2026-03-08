@@ -158,8 +158,10 @@ public class Piece {
             if (count == controls.size()) {
                 m++;
             }
+            else {
+                b = controls.get(count-1);
+            }
             count++;
-            b = controls.get(count-1);
         }
      return controlsTrue;
     }
@@ -171,66 +173,116 @@ public class Piece {
     //returns an arraylist of squares which are legal to move to
     //please note that your piece must have some sort of logic. Just being able to move to every square on the board is not
     //going to score any points.
-    public ArrayList<Square> getLegalMoves(Board b, Square start){
-        ArrayList<Square> moves = new ArrayList<>();
-        int row = start.getRow();
-        int col = start.getCol();
-        //crowned only moves
+    public ArrayList<Square> getLegalMoves(Board board, Square start){
+        ArrayList<Square> controls = new ArrayList<>();
+        ArrayList<Square> controlsTrue = new ArrayList<>();
+        Square b = start;
+        int m = 0;
+        int count = 0;
+        int y = 0;
+        while(m==0) {
         if (king) {
 //down to the right is in bounds for jumps for takes
-            if(start.getRow()+2<=7 && start.getCol()+2<=7){
+            if(b.getRow()+2<=7 && b.getCol()+2<=7){
                 //there is a piece of opposite color down and to the right of us and no piece preventing a jump
-                if(b.getSquareArray()[start.getRow()+1][start.getCol()+1].isOccupied() && b.getSquareArray()[start.getRow()+1][start.getCol()+1].getOccupyingPiece().getColor()!=color && !b.getSquareArray()[start.getRow()+2][start.getCol()+2].isOccupied()) {
-                    moves.add(b.getSquareArray()[start.getRow()+2][start.getCol()+2]);
+                if(board.getSquareArray()[b.getRow()+1][b.getCol()+1].isOccupied() && board.getSquareArray()[b.getRow()+2][b.getCol()+2].getOccupyingPiece().getColor()!=color && !board.getSquareArray()[b.getRow()+2][b.getCol()+2].isOccupied()) {
+                    for (int x = 0; x < controls.size(); x++) {
+                        if(b==controls.get(x)) {
+                            y++;
+                        }
+                        else if(board.getSquareArray()[b.getRow()+2][b.getCol()+2]==board.getSquareArray()[start.getRow()][start.getCol()]) {
+                            y++;
+                        }
+                    }
+                    if (y == 0) {
+                        controls.add(board.getSquareArray()[b.getRow()+2][b.getCol()+2]);
+                        controlsTrue.add(board.getSquareArray()[b.getRow()+2][b.getCol()+2]);
+                    }
+                    y =0;
                 }
             }
-            //down and to the right is in bounds for non taking jumps
-            if(start.getRow()+1<=7&&start.getCol()+1<=7) {
-                if(!b.getSquareArray()[start.getRow()+1][start.getCol()+1].isOccupied() ) {
-                    moves.add(b.getSquareArray()[start.getRow()+1][start.getCol()+1]);
-                }
+            if (b.getRow()+1<=7 && b.getCol()+2<=1 && !board.getSquareArray()[b.getRow()+1][b.getCol()+1].isOccupied()) {
+                    controlsTrue.add(board.getSquareArray()[b.getRow()+1][b.getCol()+1]);
             }
 
             //down and to the left is in bounds for taking jumps
-            if(start.getRow()+2<=7 && start.getCol()-2>=0){
-                //there is a piece of opposite color down and to the left of us and no piece preventing a jump
-                if(b.getSquareArray()[start.getRow()+1][start.getCol()-1].isOccupied() && b.getSquareArray()[start.getRow()+1][start.getCol()-1].getOccupyingPiece().getColor()!=color && !b.getSquareArray()[start.getRow()+2][start.getCol()-2].isOccupied()) {
-                    moves.add(b.getSquareArray()[start.getRow()+2][start.getCol()-2]);
+            if(b.getRow()+2<=7 && b.getCol()-2<=7){
+                //there is a piece of opposite color down and to the right of us and no piece preventing a jump
+                if(board.getSquareArray()[b.getRow()+1][b.getCol()-1].isOccupied() && board.getSquareArray()[b.getRow()+1][b.getCol()-1].getOccupyingPiece().getColor()!=color && !board.getSquareArray()[b.getRow()+2][b.getCol()-2].isOccupied()) {
+                    for (int x = 0; x < controls.size(); x++) {
+                        if(board.getSquareArray()[b.getRow()+2][b.getCol()-2]==controls.get(x)) {
+                            y++;
+                        }
+                        else if(board.getSquareArray()[b.getRow()+2][b.getCol()-2]==board.getSquareArray()[start.getRow()][start.getCol()]) {
+                            y++;
+                        }
+                    }
+                    if (y == 0) {
+                        controls.add(board.getSquareArray()[b.getRow()+2][b.getCol()-2]);
+                        controlsTrue.add(board.getSquareArray()[b.getRow()+2][b.getCol()-2]);
+                    }
+                    y =0;
                 }
             }
-            //down and to the left is in bounds for non taking jumps
-            if(start.getRow()+1<=7 && start.getCol()-1>=0 && !b.getSquareArray()[start.getRow()+1][start.getCol()-1].isOccupied()) {
-                 moves.add(b.getSquareArray()[start.getRow()+1][start.getCol()-1]);
+            if (b.getRow()+1<=7 && b.getCol()-1<=7 && !board.getSquareArray()[b.getRow()+1][b.getCol()-1].isOccupied()); {
+                    controlsTrue.add(board.getSquareArray()[b.getRow()+1][b.getCol()-1]);
             }
         }
-        while(row>0){
+
             //start of always moves
             //up to the right is in bounds for jumps for takes
-            if(start.getRow()-2>=0 && start.getCol()+2<=7){
-                //there is a piece of opposite color up and to the right of us and no piece preventing a jump
-                if(b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() && b.getSquareArray()[start.getRow()-1][start.getCol()+1].getOccupyingPiece().getColor()!=color && !b.getSquareArray()[start.getRow()-2][start.getCol()+2].isOccupied()) {
-                    moves.add(b.getSquareArray()[start.getRow()-2][start.getCol()+2]);
+            if(b.getRow()-2<=7 && b.getCol()+2<=7){
+                //there is a piece of opposite color down and to the right of us and no piece preventing a jump
+                if(board.getSquareArray()[b.getRow()-1][b.getCol()+1].isOccupied() && board.getSquareArray()[b.getRow()-1][b.getCol()+1].getOccupyingPiece().getColor()!=color && !board.getSquareArray()[b.getRow()-2][b.getCol()+2].isOccupied()) {
+                    for (int x = 0; x < controls.size(); x++) {
+                        if(board.getSquareArray()[b.getRow()-2][b.getCol()+2]==controls.get(x)) {
+                            y++;
+                        }
+                        else if(board.getSquareArray()[b.getRow()-2][b.getCol()+2]==board.getSquareArray()[start.getRow()][start.getCol()]) {
+                            y++;
+                        }
+                    }
+                    if (y == 0) {
+                        controls.add(board.getSquareArray()[b.getRow()-2][b.getCol()+2]);
+                        controlsTrue.add(board.getSquareArray()[b.getRow()-2][b.getCol()+2]);
+                    }
+                    y =0;
                 }
             }
-            //up and to the right is in bounds for non taking jumps
-            if(start.getRow()-1>=0&&start.getCol()+1<=7) {
-                if(!b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() ) {
-                    moves.add(b.getSquareArray()[start.getRow()-1][start.getCol()+1]);
-                }
+            if (b.getRow()-1<=7 && b.getCol()+1<=7 && !board.getSquareArray()[b.getRow()-1][b.getCol()+1].isOccupied()); {
+                controlsTrue.add(board.getSquareArray()[b.getRow()-1][b.getCol()+1]);
             }
-
+            
             //up and to the left is in bounds for taking jumps
-            if(start.getRow()-2>=0 && start.getCol()-2>=0){
-                //there is a piece of opposite color up and to the left of us and no piece preventing a jump
-                if(b.getSquareArray()[start.getRow()-1][start.getCol()-1].isOccupied() && b.getSquareArray()[start.getRow()-1][start.getCol()-1].getOccupyingPiece().getColor()!=color && !b.getSquareArray()[start.getRow()-2][start.getCol()-2].isOccupied()) {
-                    moves.add(b.getSquareArray()[start.getRow()-2][start.getCol()-2]);
+            if(b.getRow()-2<=7 && b.getCol()-2<=7){
+                //there is a piece of opposite color down and to the right of us and no piece preventing a jump
+                if(board.getSquareArray()[b.getRow()-1][b.getCol()-1].isOccupied() && board.getSquareArray()[b.getRow()-1][b.getCol()-1].getOccupyingPiece().getColor()!=color && !board.getSquareArray()[b.getRow()-2][b.getCol()-2].isOccupied()) {
+                    for (int x = 0; x < controls.size(); x++) {
+                        if(board.getSquareArray()[b.getRow()-2][b.getCol()-2]==controls.get(x)) {
+                            y++;
+                        }
+                        else if(board.getSquareArray()[b.getRow()-2][b.getCol()-2]==board.getSquareArray()[start.getRow()][start.getCol()]) {
+                            y++;
+                        }
+                    }
+                    if (y == 0) {
+                        controls.add(board.getSquareArray()[b.getRow()-2][b.getCol()-2]);
+                        controlsTrue.add(board.getSquareArray()[b.getRow()-2][b.getCol()-2]);
+                    }
+                    y =0;
                 }
             }
-            //up and to the left is in bounds for non taking jumps
-            if(!b.getSquareArray()[start.getRow()-1][start.getCol()+1].isOccupied() && start.getRow()-1>=0 && start.getCol()-1>=0) {
-                 moves.add(b.getSquareArray()[start.getRow()-1][start.getCol()-1]);
+            if (b.getRow()-1<=7 && b.getCol()-1<=7 && !board.getSquareArray()[b.getRow()-1][b.getCol()-1].isOccupied()); {
+                controlsTrue.add(board.getSquareArray()[b.getRow()-1][b.getCol()-1]);
             }
+            if (count == controls.size()) {
+                m++;
+            }
+            else {
+                b = controls.get(count-1);
+            }
+            count++;
         }
-    	return moves;
+     return controlsTrue;
     }
 }
